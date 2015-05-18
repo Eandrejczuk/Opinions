@@ -153,16 +153,16 @@ if __name__ == "__main__":
     with np.errstate(invalid='ignore'):
          Cij=np.where(S>0, E/S  , 0)
 
-    n = 0
-    H=[]
-    Q=[]
+#    n = 0
+#    H=[]
+#    Q=[]
 
 
-    for i in range(0,len(Data_op)):
-        for j in range(0, len(Data_op[i])):
-                H[Data_op[i][j]] = n
-                Q[n] = Data_op[i][j]
-                n+=1
+#    for i in range(0,len(Data_op)):
+#        for j in range(0, len(Data_op[i])):
+#                H[Data_op[i][j]] = n
+#                Q[n] = Data_op[i][j]
+#                n+=1
 
 #print Cij
 
