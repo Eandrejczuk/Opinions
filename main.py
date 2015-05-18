@@ -25,25 +25,18 @@ def calculate_opinions(Reviewers, data):
                     continue #calculate values here !!!!
                 else:
                     DirectOpinions[i-1][j[1]-1]=j[2]
-                    #temp[i-1][j[1]-1]+=1
             else:
                 continue
     return DirectOpinions
-    #with np.errstate(invalid='ignore'):
-    #    CijDirect=np.where(temp>0, DirectOpinions/temp, 0)
-    #return CijDirect
 
 def calculate_S(OpinionsMatrix):
     temp=np.zeros(shape=(len(OpinionsMatrix[0]),len(OpinionsMatrix[0])))
     for i in range(OpinionsMatrix.shape[0]):
         for j in range(OpinionsMatrix.shape[1]):
                 if OpinionsMatrix[i][j] > 0:
-                    #k=OpinionsMatrix[i][j]
                     for l in range(OpinionsMatrix.shape[1]):
                         if (j!=l and OpinionsMatrix[i][l]>0):
-                            #m=OpinionsMatrix[i][l]
                             temp[l][j]+=1
-                            #temp[j][m]+=1
                 else: continue
     return temp
 
@@ -106,10 +99,6 @@ if __name__ == "__main__":
         #print Data
         #create matrix for direct opinions
         OiOp= calculate_opinions(Reviewers, Data)
-        #print "dupa"
-        #print OiOp
-        #print OpinionsMatrix[article_id-1]
-        #print OiOpAll
         #iterate on every element of matrix of opinions about opinions
         for y in range(OiOp.shape[0]):
             for z in range(OiOp.shape[1]):
@@ -129,9 +118,6 @@ if __name__ == "__main__":
         OiOpAll.append(OiOp)
 
     E=np.array((len(Reviewers),len(Reviewers)))
-    for i, value in enumerate(OiOpAll):
-        #print "i"
-
 
         #print i
         if i==0:
