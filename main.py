@@ -2,6 +2,7 @@ __author__ = 'ewaandrejczuk'
 import sqlite3
 import numpy as np
 import ModifiedDijkstra as dijkstra
+import networkx as nx
 
 def similarity(opinionA, opinionB):
     if (opinionA == 0 or opinionB==0):
@@ -9,7 +10,6 @@ def similarity(opinionA, opinionB):
     else:
         sim=(maxOp-abs(opinionA-opinionB))#/max
         return sim
-
 
 #Reviewers - list of reviewers
 #data - set of opinions about opinions, here article id, reviewer id, reviewer opinion, reviewer of reviewer, opinion about reviewer
@@ -118,8 +118,7 @@ if __name__ == "__main__":
         OiOpAll.append(OiOp)
 
     E=np.array((len(Reviewers),len(Reviewers)))
-
-        #print i
+    for i, value in enumerate(OiOpAll):
         if i==0:
              E=OiOpAll[i]
              #print "this is E"
@@ -133,11 +132,25 @@ if __name__ == "__main__":
     #print E
     S=calculate_S(OpinionsMatrix)
 
-    print E[0]
-    print S[0]
+    #print E[0]
+    #print S[0]
 
-    with np.errstate(invalid='ignore'):
-         Cij=np.where(S>0, E/S  , 0)
+    print OiOp
+    Z=nx.from_numpy_matrix(OiOpAll[0], None)
+    print (Z.nodes())
+    print (Z.edges(data=True))
+    print nx.dijkstra_path(Z,3,5)
+
+    #with np.errstate(invalid='ignore'):
+
+    # for y in range(E.shape[0]):
+    #     for z in range(E.shape[1]):
+    #         value = E[y][z]
+    #         #check if opinion about opinion exists
+    #         if (value == 0 and y!=z):
+    #             for article_id in Articles:
+    #                 k=OpinionsMatrix[article_id-1][z]
+    #                 m=OpinionsMatrix[article_id-1][y]
 
 #    n = 0
 #    H=[]
