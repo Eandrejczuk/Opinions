@@ -1,8 +1,9 @@
 __author__ = 'ewaandrejczuk'
 import sqlite3
 import numpy as np
-import ModifiedDijkstra as dijkstra
+from math import isnan
 import networkx as nx
+from Graph import NewDijsktra
 
 def similarity(opinionA, opinionB):
     if (opinionA == 0 or opinionB==0):
@@ -21,9 +22,10 @@ def calculate_opinions(Reviewers, data):
             if i==j[0]:
                 #print (i, j)
                 #do not take into an account self-opinions - to be changed?
-                if j[0]==j[1]:
-                    continue #calculate values here !!!!
-                else:
+                # if j[0]==j[1]:
+                #     DirectOpinions[i-1][j[1]-1]=maxOp
+                #     continue #calculate values here !!!!
+                # else:
                     DirectOpinions[i-1][j[1]-1]=j[2]
             else:
                 continue
@@ -35,10 +37,29 @@ def calculate_S(OpinionsMatrix):
         for j in range(OpinionsMatrix.shape[1]):
                 if OpinionsMatrix[i][j] > 0:
                     for l in range(OpinionsMatrix.shape[1]):
-                        if (j!=l and OpinionsMatrix[i][l]>0):
+                        if OpinionsMatrix[i][l]>0: #(j!=l and ):
                             temp[l][j]+=1
                 else: continue
     return temp
+
+def normalize_opinions(matrix):
+    NormalizedMatrix=np.empty(shape=(len(matrix[0]),len(matrix[0])))
+    for y in range(matrix.shape[0]):
+        for z in range(matrix.shape[1]):
+            if matrix[y][z]==0 or matrix[y][z] is None:
+                NormalizedMatrix[y][z] = np.nan
+            else:
+                value=matrix[y][z]
+                NormalizedMatrix[y][z]=value/maxOp
+
+    return NormalizedMatrix
+
+def from_matrix_to_graph(matrix):
+   graph = nx.DiGraph()
+   for (x,y), value in np.ndenumerate(matrix):
+       if not isnan(value):
+           graph.add_edge(x, y, {'weight': value})
+   return graph
 
 ##############################################################################################################################################
 #download data from database
@@ -100,6 +121,7 @@ if __name__ == "__main__":
         #create matrix for direct opinions
         OiOp= calculate_opinions(Reviewers, Data)
         #iterate on every element of matrix of opinions about opinions
+        #print OiOp
         for y in range(OiOp.shape[0]):
             for z in range(OiOp.shape[1]):
                 value = OiOp[y][z]
@@ -116,30 +138,53 @@ if __name__ == "__main__":
                     continue
                     #print OiOp
         OiOpAll.append(OiOp)
-
+    #print OiOpAll[0]
     E=np.array((len(Reviewers),len(Reviewers)))
     for i, value in enumerate(OiOpAll):
         if i==0:
              E=OiOpAll[i]
-             #print "this is E"
-             #print E
         elif i>=1:
              E=E+OiOpAll[i]
 
-
     #print OiOpAll[0]
 
-    #print E
+
     S=calculate_S(OpinionsMatrix)
 
     #print E[0]
     #print S[0]
+    with np.errstate(invalid='ignore'):
+        MatrixH=np.where(E>0, np.divide(E,S), None)
+    #print MatrixH
+    #print OiOp
+    MatrixHNormalized=normalize_opinions(MatrixH)
+    GraphG=from_matrix_to_graph(MatrixHNormalized)
 
-    print OiOp
-    Z=nx.from_numpy_matrix(OiOpAll[0], None)
-    print (Z.nodes())
-    print (Z.edges(data=True))
-    print nx.dijkstra_path(Z,3,5)
+
+    print GraphG.nodes()
+    print GraphG.edges()
+    print GraphG.edges(5, data= True)
+    for i in range(MatrixHNormalized.shape[0]):
+        #pass
+        print i
+        dupa=NewDijsktra(GraphG,i)
+        print dupa
+
+
+    for i in range(MatrixHNormalized.shape[0]):
+        #pass
+        print i
+        dupa=NewDijsktra(GraphG,i)
+        print dupa
+    #NodesClean = {k: NodesWithNan[k] for k in NodesWithNan if not isnan(NodesWithNan[k])}
+    #print MatrixHNormalized
+    #for i in range(MatrixHNormalized.shape[0]):
+
+        #for j in range(MatrixHNormalized.shape[1]):
+            #MatrixCij= NewDijsktra(MatrixHNormalized[i],i)
+
+    #print MatrixCij
+    #print nx.dijkstra_path(Z,0,11)
 
     #with np.errstate(invalid='ignore'):
 
