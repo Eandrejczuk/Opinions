@@ -2,10 +2,13 @@ import numpy
 
 def NewDijsktra(graph, start):
     D = {}  # Final distances dict
+    A = {}
+    B = {}
     P = {}  # Predecessor dict
     # Fill the dicts with default values
     for node in graph.nodes():
         D[node] = 10  # Vertices are unreachable
+        A[node] = 10
         P[node] = ""  # Vertices have no predecessors
     D[start] = 1  # The start vertex needs no move
     unseen_nodes = list(graph.nodes())  # All nodes are unseen
@@ -17,7 +20,7 @@ def NewDijsktra(graph, start):
             if shortest is None:
                 shortest = D[temp_node]
                 node = temp_node
-            elif D[temp_node] < shortest:
+            elif A[temp_node] < shortest:
                 shortest = D[temp_node]
                 node = temp_node
         # Remove the selected node from unseen_nodes
@@ -26,6 +29,8 @@ def NewDijsktra(graph, start):
         for child_node, child_value in graph[node].items():
             if D[child_node] > D[node] + child_value["weight"]:
                 D[child_node] = D[node] * child_value["weight"]
+                A[child_node] = 1-D[child_node]
                 # To go to child_node, you have to go through node
                 P[child_node] = node
-    return start, D
+                B[child_node]=1-A[child_node]
+    return start, B
