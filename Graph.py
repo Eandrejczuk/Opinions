@@ -20,17 +20,17 @@ def NewDijsktra(graph, start):
             if shortest is None:
                 shortest = D[temp_node]
                 node = temp_node
-            elif A[temp_node] < shortest:
+            elif D[temp_node] < shortest:
                 shortest = D[temp_node]
                 node = temp_node
         # Remove the selected node from unseen_nodes
         unseen_nodes.remove(node)
         # For each child (ie: connected vertex) of the current node
         for child_node, child_value in graph[node].items():
-            if D[child_node] > D[node] + child_value["weight"]:
-                D[child_node] = D[node] * child_value["weight"]
+            if D[child_node] > D[node] / child_value["weight"]:
+                D[child_node] = D[node] / child_value["weight"]
                 A[child_node] = 1-D[child_node]
                 # To go to child_node, you have to go through node
                 P[child_node] = node
-                B[child_node]=1-A[child_node]
+                B[child_node]=1/D[child_node]
     return start, B

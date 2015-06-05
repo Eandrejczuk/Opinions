@@ -12,8 +12,13 @@ def from_matrix_to_graph(matrix):
            graph.add_edge(x, y, {'weight': value})
    return graph
 
-#matrix=np.array([[np.NaN, 0.2, 0.2, np.NaN],[0.3, np.NaN, 0.5, np.NaN],[1, 0.9, np.NaN, 0.1],[np.NaN, 0.5, np.NaN, np.NaN]])
-#print matrix
+# matrix=np.array([[1, 0.9, np.NaN, np.NaN, 0.2,np.NaN],
+#                  [np.NaN, 1, 0.9, np.NaN, 0.4, np.NaN],
+#                  [np.NaN,np.NaN,1,np.NaN,np.NaN, 0.7],
+#                  [np.NaN, np.NaN, 0.5,1,np.NaN,np.NaN]
+#                  ,[np.NaN,np.NaN,np.NaN,np.NaN,1,0.2],
+#                  [np.NaN,np.NaN,np.NaN,0.4,np.NaN,1]])
+# print matrix
 
 matrix=np.array([[np.NaN,0.2    ,np.NaN,np.NaN,0.8],
                  [np.NaN,np.NaN ,1     ,np.NaN,np.NaN],
