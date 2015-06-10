@@ -1,13 +1,14 @@
 import numpy
 
 def NewDijsktra(graph, start):
-    D = {}  # Final distances dict
-    B = {}
+    D = {}  # Reversed distances dict
+    B = {}  # Final distances dict
     P = {}  # Predecessor dict
     # Fill the dicts with default values
     for node in graph.nodes():
         D[node] = 10  # Vertices are unreachable
         P[node] = ""  # Vertices have no predecessors
+        B[node] = 1
     D[start] = 1  # The start vertex needs no move
     unseen_nodes = list(graph.nodes())  # All nodes are unseen
     while len(unseen_nodes) > 0:
@@ -30,4 +31,5 @@ def NewDijsktra(graph, start):
                 # To go to child_node, you have to go through node
                 P[child_node] = node
                 B[child_node]=1/D[child_node]
-    return start, B
+
+    return B

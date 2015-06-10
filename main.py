@@ -4,6 +4,9 @@ import numpy as np
 from math import isnan
 import networkx as nx
 from Graph import NewDijsktra
+import matplotlib.pyplot as plt
+from numpy import linalg as LA
+from numpy import matrix
 
 def similarity(opinionA, opinionB):
     if (opinionA == 0 or opinionB==0):
@@ -26,7 +29,8 @@ def calculate_opinions(Reviewers, data):
                 #     DirectOpinions[i-1][j[1]-1]=maxOp
                 #     continue #calculate values here !!!!
                 # else:
-                    DirectOpinions[i-1][j[1]-1]=j[2]
+                    #DirectOpinions[i-1][j[1]-1]=j[2]
+                    DirectOpinions[j[1]-1][i-1]=j[2]
             else:
                 continue
     return DirectOpinions
@@ -61,6 +65,24 @@ def from_matrix_to_graph(matrix):
            graph.add_edge(x, y, {'weight': value})
    return graph
 
+def from_dict_to_matrix(dict):
+    matrix=np.empty(len(dict))
+    for key, elem in dict.items():
+        matrix[key] = elem
+    return matrix
+
+def qsort(data):
+    if len(data) <= 1:
+       return data
+    pivot = data[0]
+    smaller = []
+    greater = []
+    for x in data[1:]:
+        if x < pivot:
+            smaller.append(x)
+        else:
+            greater.append(x)
+    return qsort(greater) + [pivot] + qsort(smaller)
 ##############################################################################################################################################
 #download data from database
 if __name__ == "__main__":
@@ -71,11 +93,14 @@ if __name__ == "__main__":
     db.isolation_level = None
     cursr = db.cursor()
 
-    cursr.execute('''
-    select max(opinion_value) from opinions_art''')
-    temp = cursr.fetchone()
-    for i in temp:
-        maxOp=i
+    # cursr.execute('''
+    # select max(opinion_value) from opinions_art''')
+    # temp = cursr.fetchone()
+    # for i in temp:
+    #     maxOp=i
+
+    #max opinion about the article
+    maxOp = 10
 
     Articles=[]
     cursr.execute('''select article_id from articles''')
@@ -120,6 +145,8 @@ if __name__ == "__main__":
         #print Data
         #create matrix for direct opinions
         OiOp= calculate_opinions(Reviewers, Data)
+        #print "this is OiOp"
+        #print OiOp
         #iterate on every element of matrix of opinions about opinions
         #print OiOp
         for y in range(OiOp.shape[0]):
@@ -130,7 +157,7 @@ if __name__ == "__main__":
                     k=OpinionsMatrix[article_id-1][z]
                     m=OpinionsMatrix[article_id-1][y]
                     if (k>0 and m>0):
-                            temp = similarity(k,m)
+                            temp = similarity(k,m) #add average
                             OiOp[y][z]=temp
                     else:
                         continue
@@ -145,37 +172,139 @@ if __name__ == "__main__":
              E=OiOpAll[i]
         elif i>=1:
              E=E+OiOpAll[i]
-
-    #print OiOpAll[0]
+    print "this is OiOpAll"
+    print OiOpAll[0]
 
 
     S=calculate_S(OpinionsMatrix)
-
-    #print E[0]
-    #print S[0]
+    #print "this is E"
+    #print E
+    #print S
     with np.errstate(invalid='ignore'):
-        MatrixH=np.where(E>0, np.divide(E,S), None)
+        MatrixH=np.where(S>0, E/S, 0)
+
     #print MatrixH
     #print OiOp
     MatrixHNormalized=normalize_opinions(MatrixH)
     GraphG=from_matrix_to_graph(MatrixHNormalized)
 
+    #USE THIS TO PRINT A GRAPH
+    #print GraphG.nodes()
 
-    print GraphG.nodes()
-    print GraphG.edges()
-    print GraphG.edges(5, data= True)
+    #print GraphG.edges(data = True)
+
+    #dupa = ((u,v) for u,v,d in GraphG.edges_iter(data=True) if d['weight']==1)
+    #for i in dupa:
+    #    print i
+    #pos=nx.spring_layout(GraphG)
+    #edge_labels=dict([((u,v,),d['weight'])
+    #                 for u,v,d in GraphG.edges(data=True)])
+    #node_labels = {node:node for node in GraphG.nodes()};
+    #nx.draw_networkx_labels(GraphG, pos, labels=node_labels)
+    #nx.draw_networkx_edge_labels(GraphG,pos,edge_labels=edge_labels)
+    #nx.draw_networkx(GraphG, pos,node_color='#A0CBE2',edge_color='#404040',width=4,edge_cmap=plt.cm.Blues,with_labels=True)
+    #plt.savefig("graph.png", dpi=500, facecolor='w', edgecolor='w',orientation='portrait', papertype=None, format=None,transparent=False, bbox_inches=None, pad_inches=0.1)
+    #plt.show(GraphG)
+
+    #run Dijkstra for matrix X normalized
+    A=np.zeros(shape=(len(GraphG), len(GraphG)))
     for i in range(MatrixHNormalized.shape[0]):
-        #pass
-        print i
-        dupa=NewDijsktra(GraphG,i)
-        print dupa
+        temp=NewDijsktra(GraphG,i)
+        #print temp
+        A[i]=from_dict_to_matrix(temp)
+
+    #if opinion exists, take the value, otherwise take the Dijkstra value
+    FinalMatrixC=np.zeros((len(Reviewers),len(Reviewers)))
+    for y in range(MatrixHNormalized.shape[0]):
+            for z in range(MatrixHNormalized.shape[1]):
+                if MatrixHNormalized[y][z]>0:
+                    FinalMatrixC[y][z]=MatrixHNormalized[y][z]
+                else:
+                    FinalMatrixC[y][z]=A[y][z]
+    #print FinalMatrixC
+
+    print "this is Final Matrix C \n", FinalMatrixC
+
+    print "with mean: ", np.mean(FinalMatrixC, axis=1)
+
+    #not needed - normalising step
+    #for i in range(FinalMatrixC.shape[0]):
+    #    FinalMatrixC[i] = FinalMatrixC[i]/FinalMatrixC[i].sum()
+
+    print "this is Final Matrix C with normalization for Eigentrust \n", FinalMatrixC
+    #Generate Trust Vector
+    e= np.empty(len(FinalMatrixC))
+    matrix(e.fill(float(1)/len(FinalMatrixC)))
+    #print "with sum: ", np.sum(FinalMatrixC, axis=0)
+
+    print 'Trust Vector e =',e
+
+    Delta=1
+    t=e.T
+    print 'Vector t',t
+    Ct=FinalMatrixC.transpose()
+    print 'Matrix Ct'
+    print Ct
+
+    while (Delta>0.0001):
+        t2=np.dot(Ct,t)
+        #normalise values
+        t2=t2/t2.sum()
+        print'Vector t multiplied =' , t2
+        print 'Vector sum t2 =',t2.sum(axis=0)
+        VectorsRest=t2-t
+        #print "vectors rest ", VectorsRest
+        Delta=LA.norm(VectorsRest)
+        print'Delta=',Delta
+        t=t2
+
+    print 'Last Delta',Delta
+    print 'Vector t2 final', t2.sum(axis=0)
+    print OpinionsMatrix
+    OpinionAboutArticle=[]
+    for i in range(0, len(Articles)):
+            # for j in range(len(Reviewers)):
+            #     if OpinionsMatrix[i][j]>0:
+            #         OpinionAboutArticle[i][j]=1
+            # print OpinionAboutArticle
+            reviews = OpinionsMatrix[i]>0
+            a = OpinionsMatrix[i]*reviews
+            b = t2*reviews
+            prod = np.dot(a,b)/b.sum()
+            OpinionAboutArticle=OpinionAboutArticle+[prod]
+
+    OpinionAboutArticleSorted= qsort(OpinionAboutArticle)
+
+    print OpinionAboutArticle
+    #OpinionAboutArticle[i]=OiOpAll[i]
+
+    # while (Delta>0.00001):
+    #  	t2=np.dot(Ct,t)
+    #  	print'Vector t multiplied =' , t2
+    #  	print 'Vector sum t2 =',t2.sum(axis=0)
+    #  	VectorsRest=t2-t
+    #     print "vectors rest ", VectorsRest
+    #  	Delta=LA.norm(VectorsRest)
+    #  	print'Delta=',Delta
+    #  	t=t2
+    #
+    # print 'Last Delta',Delta
+    # print 'Vector t2 final', t2.sum(axis=0)
 
 
-    for i in range(MatrixHNormalized.shape[0]):
-        #pass
-        print i
-        dupa=NewDijsktra(GraphG,i)
-        print dupa
+    #print NewDijsktra2(GraphG,1)
+    # for i in range(MatrixHNormalized.shape[0]):
+    #     #pass
+    #     print i
+    #     dupa=NewDijsktra(GraphG,i)
+    #     print dupa
+    #
+    #
+    # for i in range(MatrixHNormalized.shape[0]):
+    #     #pass
+    #     print i
+    #     dupa=NewDijsktra(GraphG,i)
+    #     print dupa
     #NodesClean = {k: NodesWithNan[k] for k in NodesWithNan if not isnan(NodesWithNan[k])}
     #print MatrixHNormalized
     #for i in range(MatrixHNormalized.shape[0]):

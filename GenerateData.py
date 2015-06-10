@@ -2,13 +2,15 @@ __author__ = 'ewaandrejczuk'
 import sqlite3
 import random
 from faker import Factory
+import sys
+import scipy
 
-r = 61      #number of reviewers
-p = 240     #number of articles
-n = 21      #number or articles reviewed by each reviewer
+r = 4      #number of reviewers
+p = 10     #number of articles
+n = 5      #number or articles reviewed by each reviewer - has to be bigger or equal to p/r
 o = 3      #average number of opinions for each opinion
 ro = r*n     #number of opinions about articles
-l2=round(p/r,0)      #number of reviews per article
+l2=int(round(p/r,0))      #number of reviews per article
 
 #generate data for reviewers
 Results = []
@@ -23,12 +25,20 @@ for row in range(0,r):
 #print Results
 
 #generate data for articles
+GeneratedArticles = [[] for i in range(p)]
 fake = Factory.create()
-fakeart = []
 for row in range(0,p):
-    g=fake.text()
-    fakeart.append(g)
-#print fakeart
+    if row < int(p/3):
+        g=0
+    if int(p/3) <= row < int(2*p/3):
+        g=1
+    if row > int(2*p/3):
+        g=2
+    GeneratedArticles[row].append(g)
+    go=fake.text()
+    GeneratedArticles[row].append(go)
+
+print GeneratedArticles
 
 
 #open database connection
@@ -40,7 +50,7 @@ cursr3 = db.cursor()
 
 #drop tables if exists
 cursr.execute('''drop TABLE if exists reviewers''')
-#cursr.execute('''drop table if exists rev_img_decode''')
+cursr.execute('''drop table if exists rev_img_decode''')
 cursr.execute('''drop table if exists articles''')
 cursr.execute('''drop table if exists opinions_art''')
 cursr.execute('''drop table if exists opinions_op''')
@@ -53,7 +63,7 @@ cursr.execute('''CREATE TABLE IF NOT EXISTS rev_img_decode
              (self_img_id INTEGER PRIMARY KEY AUTOINCREMENT, self_img_name text)''')
 
 cursr.execute('''CREATE TABLE IF NOT EXISTS articles
-             (article_id INTEGER PRIMARY KEY AUTOINCREMENT, article_title text)''')
+             (article_id INTEGER PRIMARY KEY AUTOINCREMENT, true_quality float, article_title text)''')
 
 cursr.execute('''CREATE TABLE IF NOT EXISTS opinions_art
              (opinion_id INTEGER PRIMARY KEY AUTOINCREMENT, article_id INTEGER NOT NULL, rev_id INTEGER NOT NULL, opinion_value int, opinion_text text,
@@ -73,8 +83,8 @@ cursr.execute('''
 #fill tables with data
 for item_r in Results:
     cursr.execute('''INSERT INTO reviewers (rev_id, self_img_id) VALUES (null,?)''', (item_r, ))
-for item_a in fakeart:
-    cursr.execute('''INSERT INTO articles (article_id, article_title) VALUES (null,?)''', (item_a,))
+for item_a in GeneratedArticles:
+    cursr.executemany('''INSERT INTO articles (article_id, true_quality, article_title) VALUES (null,?,?)''', (item_a,))
 
 cursr.execute('''Insert or ignore into rev_img_decode values
              (null, 'low self esteem')''')
@@ -107,7 +117,7 @@ for j in cursr2.fetchall():
 
 #dictionary to store number of articles reviewed by each reviewer
 NumOfArtForRev = {Reviewers[n]: initial[n] for n in range(len(Reviewers))}
-
+counter=0
 #print e
 for i in Articles:
     #check if reviewer already checked n articles
@@ -117,29 +127,39 @@ for i in Articles:
             #del some_dict[key]
              del NumOfArtForRev[key]
 
-    los = random.sample(Reviewers, int(round(p/r,0)))
+    los = random.sample(Reviewers, l2)
     for randRev in los:
              d=(i,randRev)
              listArtRev.append(d)
+             counter+=1
+             if counter >=len(GeneratedOpinions):
+                break
              if randRev in NumOfArtForRev:
                 NumOfArtForRev[randRev] += 1
+    if counter >=len(GeneratedOpinions):
+        break
 
-Opinions= [list(listArtRev[x])+list(GeneratedOpinions[x]) for x in range(len(listArtRev))]
+print "size of listArtRev, GeneratedOpinions =", (len(listArtRev),len(GeneratedOpinions))
+if  len(listArtRev)   ==  len(GeneratedOpinions):
+    Opinions= [list(listArtRev[x])+list(GeneratedOpinions[x]) for x in range(len(listArtRev))]
+else:
+    print "number or articles reviewed by each reviewer has to be bigger or equal to p/r"
+    sys.exit()
 #
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,1,9,'excellent')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,2,8,'excellent')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,4,5,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,5,5,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,7,5,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,8,8,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,9,10,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,10,2,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,15,1,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,16,4,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,18,3,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,19,9,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,20,5,'nothing special')''')
-cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,24,5,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,1,9,'excellent')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,2,8,'excellent')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,4,5,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,5,5,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,7,5,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,8,8,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,9,10,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,10,2,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,15,1,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,16,4,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,18,3,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,19,9,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,20,5,'nothing special')''')
+# cursr3.execute('''INSERT INTO opinions_art (opinion_id, article_id, rev_id, opinion_value,opinion_text ) VALUES (null,1,24,5,'nothing special')''')
 
 #insert generated opinions to the database
 for item_o in Opinions:

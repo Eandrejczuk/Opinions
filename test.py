@@ -4,6 +4,7 @@ import networkx as nx
 from math import isnan
 from Graph import *
 from plan import *
+import matplotlib.pyplot as plt
 
 def from_matrix_to_graph(matrix):
    graph = nx.DiGraph()
@@ -28,7 +29,14 @@ print matrix
 #                  ])
 # print matrix
 GraphG=from_matrix_to_graph(matrix)
-
+# pos=nx.spring_layout(GraphG)
+# edge_labels=dict([((u,v,),d['weight'])
+#                  for u,v,d in GraphG.edges(data=True)])
+# node_labels = {node:node for node in GraphG.nodes()};
+# #nx.draw_networkx_labels(GraphG, pos, labels=node_labels)
+# nx.draw_networkx_edge_labels(GraphG,pos,edge_labels=edge_labels)
+# nx.draw_networkx(GraphG)
+# plt.show(GraphG)
 # for i in range(matrix.shape[0]):
 #     print i
 #     duoa1=NewDijsktra(GraphG,i)
@@ -38,7 +46,7 @@ GraphG=from_matrix_to_graph(matrix)
 import time
 
 t0 = time.time()
-dupa1=NewDijsktra(GraphG,0)
+dupa1=NewDijsktra(GraphG,1)
 t1 = time.time()
 print dupa1
 print "time = ", t1-t0
