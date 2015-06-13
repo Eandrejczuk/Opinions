@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Experiment1.py" line="87" mnemonic="0" />
+    <bookmark url="file://$PROJECT_DIR$/Experiment1.py" line="88" mnemonic="0" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd7e0387-9850-4502-a83b-addb8cf4f28e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Eigentrust.py" afterPath="$PROJECT_DIR$/Eigentrust.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Experiment1.py" afterPath="$PROJECT_DIR$/Experiment1.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GenerateData.py" afterPath="$PROJECT_DIR$/GenerateData.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data.db" afterPath="$PROJECT_DIR$/data.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
@@ -47,11 +48,21 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4039" max-vertical-offset="5115">
-              <caret line="280" column="0" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="5130">
+              <caret line="114" column="21" selection-start-line="114" selection-start-column="21" selection-end-line="114" selection-end-column="21" />
               <folding>
                 <element signature="e#29#43#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Averager.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Averager.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="1.1329305" vertical-offset="0" max-vertical-offset="600">
+              <caret line="25" column="12" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -59,8 +70,8 @@
       <file leaf-file-name="GenerateData.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GenerateData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="4215">
-              <caret line="225" column="46" selection-start-line="225" selection-start-column="32" selection-end-line="225" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1770" max-vertical-offset="4200">
+              <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="74" />
               <folding>
                 <element signature="e#29#43#0" expanded="true" />
               </folding>
@@ -68,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Experiment1.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Experiment1.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Experiment1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7075209" vertical-offset="5071" max-vertical-offset="6255">
-              <caret line="355" column="26" selection-start-line="355" selection-start-column="26" selection-end-line="355" selection-end-column="26" />
+            <state vertical-scroll-proportion="-4.5925927" vertical-offset="1721" max-vertical-offset="6750">
+              <caret line="123" column="0" selection-start-line="123" selection-start-column="0" selection-end-line="129" selection-end-column="32" />
               <folding>
                 <element signature="e#29#43#0" expanded="true" />
               </folding>
@@ -115,13 +126,15 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Experiment1.py" />
         <option value="$PROJECT_DIR$/GenerateData.py" />
+        <option value="$PROJECT_DIR$/Averager.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="-6" />
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="777" />
+    <option name="height" value="722" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -183,7 +196,7 @@
       </console-settings>
     </option>
   </component>
-  <component name="RunManager" selected="Python.GenerateData">
+  <component name="RunManager" selected="Python.Averager">
     <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -226,25 +239,6 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Eigentrust" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="opinions" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Eigentrust.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
     <configuration default="false" name="Experiment1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -279,6 +273,25 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="opinions" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Plot_Beta.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Averager" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="opinions" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Averager.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -410,17 +423,17 @@
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.main" />
       <item index="1" class="java.lang.String" itemvalue="Python.GenerateData" />
-      <item index="2" class="java.lang.String" itemvalue="Python.Eigentrust" />
-      <item index="3" class="java.lang.String" itemvalue="Python.Experiment1" />
-      <item index="4" class="java.lang.String" itemvalue="Python.Plot_Beta" />
+      <item index="2" class="java.lang.String" itemvalue="Python.Experiment1" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Plot_Beta" />
+      <item index="4" class="java.lang.String" itemvalue="Python.Averager" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.GenerateData" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Experiment1" />
-        <item index="2" class="java.lang.String" itemvalue="Python.Plot_Beta" />
-        <item index="3" class="java.lang.String" itemvalue="Python.main" />
-        <item index="4" class="java.lang.String" itemvalue="Python.Eigentrust" />
+        <item index="0" class="java.lang.String" itemvalue="Python.Averager" />
+        <item index="1" class="java.lang.String" itemvalue="Python.main" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Experiment1" />
+        <item index="3" class="java.lang.String" itemvalue="Python.GenerateData" />
+        <item index="4" class="java.lang.String" itemvalue="Python.Plot_Beta" />
       </list>
     </recent_temporary>
   </component>
@@ -438,7 +451,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="777" extended-state="0" />
+    <frame x="-6" y="23" width="1280" height="722" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -449,7 +462,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3695921" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41525424" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4502297" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -591,10 +604,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/Experiment1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4039" max-vertical-offset="5115">
-          <caret line="280" column="0" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
+        <state vertical-scroll-proportion="-4.5925927" vertical-offset="1721" max-vertical-offset="6750">
+          <caret line="123" column="0" selection-start-line="123" selection-start-column="0" selection-end-line="129" selection-end-column="32" />
           <folding>
             <element signature="e#29#43#0" expanded="true" />
           </folding>
@@ -603,21 +616,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GenerateData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="4215">
-          <caret line="225" column="46" selection-start-line="225" selection-start-column="32" selection-end-line="225" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1770" max-vertical-offset="4200">
+          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="122" selection-end-column="74" />
           <folding>
             <element signature="e#29#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Experiment1.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7075209" vertical-offset="5071" max-vertical-offset="6255">
-          <caret line="355" column="26" selection-start-line="355" selection-start-column="26" selection-end-line="355" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="5130">
+          <caret line="114" column="21" selection-start-line="114" selection-start-column="21" selection-end-line="114" selection-end-column="21" />
           <folding>
             <element signature="e#29#43#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Averager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.1329305" vertical-offset="0" max-vertical-offset="600">
+          <caret line="25" column="12" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>

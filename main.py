@@ -30,7 +30,7 @@ def calculate_opinions(Reviewers, data):
                 #     continue #calculate values here !!!!
                 # else:
                     #DirectOpinions[i-1][j[1]-1]=j[2]
-                    DirectOpinions[j[1]-1][i-1]=j[2]
+                    DirectOpinions[i-1][j[1]-1]=j[2]
             else:
                 continue
     return DirectOpinions
@@ -71,18 +71,18 @@ def from_dict_to_matrix(dict):
         matrix[key] = elem
     return matrix
 
-def qsort(data):
-    if len(data) <= 1:
-       return data
-    pivot = data[0]
-    smaller = []
-    greater = []
-    for x in data[1:]:
-        if x < pivot:
-            smaller.append(x)
-        else:
-            greater.append(x)
-    return qsort(greater) + [pivot] + qsort(smaller)
+# def qsort(data):
+#     if len(data) <= 1:
+#        return data
+#     pivot = data[0]
+#     smaller = []
+#     greater = []
+#     for x in data[1:]:
+#         if x < pivot:
+#             smaller.append(x)
+#         else:
+#             greater.append(x)
+#     return qsort(greater) + [pivot] + qsort(smaller)
 ##############################################################################################################################################
 #download data from database
 if __name__ == "__main__":
@@ -113,7 +113,7 @@ if __name__ == "__main__":
         Reviewers.append(k[0])
 
     cursr.execute('''
-    select article_id, rev_id, opinion_value from opinions_art order by article_id''')
+    select article_id, rev_id, opinion_value from opinions_art_beta order by article_id''')
     #article id, reviewer id, reviewer opinion, reviewer of reviewer, opinion about reviewer
     Data_op = cursr.fetchall()
 
@@ -126,7 +126,8 @@ if __name__ == "__main__":
                     OpinionsMatrix[i-1][j[1]-1]=j[2]
             else:
                 continue
-    #print OpinionsMatrix
+    print "opinions matrix"
+    print OpinionsMatrix
     #print len(OpinionsMatrix)
 
     OiOpAll=[]
@@ -134,8 +135,8 @@ if __name__ == "__main__":
     temp=np.zeros(shape=(len(Reviewers),len(Reviewers)))
     for article_id in Articles:
         cursr.execute('''
-        select oa.rev_id, oo.reviewer_of_op,oo.opinion_value from opinions_art oa
-        join opinions_op oo on oa.article_id=oo.article_id and oa.rev_id=oo.rev_id
+        select oa.rev_id, oo.reviewer_of_op,oo.opinion_value from opinions_art_beta oa
+        join opinions_op_beta oo on oa.article_id=oo.article_id and oa.rev_id=oo.rev_id
         where oa.article_id=?
         order by oa.rev_id
         ''', (article_id,))
@@ -273,7 +274,7 @@ if __name__ == "__main__":
             prod = np.dot(a,b)/b.sum()
             OpinionAboutArticle=OpinionAboutArticle+[prod]
 
-    OpinionAboutArticleSorted= qsort(OpinionAboutArticle)
+    #OpinionAboutArticleSorted= qsort(OpinionAboutArticle)
 
     print OpinionAboutArticle
     #OpinionAboutArticle[i]=OiOpAll[i]

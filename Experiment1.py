@@ -2,6 +2,7 @@ __author__ = 'ewaandrejczuk'
 import sqlite3
 import sys
 from scipy.stats import beta
+from scipy.stats import kendalltau
 import numpy as np
 import random
 
@@ -85,16 +86,16 @@ def main():
 
     ########################################################################################################################
     #This is to generate opinions about articles
-    size_good=30
+    size_good=15
     alpha_good=1.5
     beta_good=8
 
-    size_bad=30
+    size_bad=15
     alpha_bad=8
     beta_bad=1.5
 
     #n = size_bad + size_good #number of all opinions about articles
-    z = 5 # max number of papers for each reviewer
+    z = 6 # max number of papers for each reviewer
     y = 3 # number of opinions for each paper
 
     Articles=[]
@@ -136,8 +137,16 @@ def main():
     cursr2.execute('''select rev_id from reviewers''')
     for k in cursr2.fetchall():
         Reviewers.append(k[0])
+    #cursr.execute('''drop TABLE if exists reviewers''')
+    #cursr.execute('''drop table if exists articles''')
     cursr.execute('''drop table if exists opinions_art_beta''')
     cursr.execute('''drop table if exists opinions_op_beta''')
+    # Create tables
+    #cursr.execute('''CREATE TABLE IF NOT EXISTS reviewers
+    #             (rev_id INTEGER PRIMARY KEY AUTOINCREMENT, self_img_id int)''')
+
+    #cursr.execute('''CREATE TABLE IF NOT EXISTS articles
+    #         (article_id INTEGER PRIMARY KEY AUTOINCREMENT, true_quality float, article_title text)''')
 
     cursr.execute('''CREATE TABLE IF NOT EXISTS opinions_art_beta
              (article_id INTEGER NOT NULL, rev_id INTEGER NOT NULL, opinion_value int,
@@ -172,10 +181,14 @@ def main():
 
         #check if reviewer already checked z articles
         check_if_remove_element(NumOfArtForGoodRev,z)
+        print "NumOfArtForGoodRev"
+        print NumOfArtForGoodRev
         check_dict_empty(NumOfArtForGoodRev, GoodRev, z)
 
         #check if article was checked y times already
         check_if_remove_element(NumOfOpForArt,y)
+        print "NumOfOpForArt"
+        print NumOfOpForArt
         check_dict_empty(NumOfOpForArt, Articles, y)
 
         rand_rev = random.choice(NumOfArtForGoodRev.keys())
@@ -221,6 +234,8 @@ def main():
 
         #check if article was checked y times already
         check_if_remove_element(NumOfOpForArt,y)
+        print "NumOfOpForArt"
+        print NumOfOpForArt
         check_dict_empty(NumOfOpForArt, Articles, y)
 
         rand_rev = random.choice(NumOfArtForBadRev.keys())
@@ -270,53 +285,7 @@ def main():
     ########################################################################################################################
     #This is to generate opinions about opinions
     distance=np.concatenate((good_stand, bad_stand), axis=0)
-    #print distance
-    #rint len(distance)
 
-
-    #print OpinionsOfOp
-
-    #match opinions with opinions
-    # ArticleReviewerID = listTemp
-    #
-    # #self opinions
-    # OpinionsMatched=[]
-    # k=len(Reviewers)
-    # #list to store reviewers who gave opinion about o opinions already
-    # #NumOfOpAboutRevArt = {Reviewers[n]: [0]*k for n in range(len(Reviewers))}
-    #
-    # for article_id in Articles:
-    # #    for key, value in NumOfOpAboutRevArt.items():
-    # #        #if item is item_to_remove:
-    # #        if (NumOfOpAboutRevArt[key] == (y-1)):
-    # #             #del some_dict[key]
-    # #              del NumOfOpAboutRevArt[key]
-    #     count=0
-    #     listOfRevOfArt=[]
-    #     cursr2.execute('''select rev_id from opinions_art_beta where article_id=?''', (article_id,))
-    #
-    #     for i in cursr2.fetchall():
-    #          listOfRevOfArt.append(i[0])
-    #     random.shuffle(listOfRevOfArt)
-    #     #print listOfRevOfArt
-    #     for j in listOfRevOfArt:
-    #          temp1=list(listOfRevOfArt)
-    #          temp1.remove(j)
-    #
-    #          if len(temp1)>(y-1):
-    #              los1 = random.sample(temp1, int(y-1))
-    #          else:
-    #              los1=temp1
-    #          for randRev in los1:
-    #                   if randRev==j:
-    #                       #j=j-1
-    #                       break
-    #                   d=(article_id,j,randRev)
-    #                   OpinionsMatched.append(d)
-    #                   count+=1
-    #          if (count == y+2):
-    #             break
-                      #if randRev in NumOfOpAboutRevArt:
 
     for i in Articles:
         Articles[i]=Articles[i]*10
@@ -340,18 +309,34 @@ def main():
         #temp1=list(listOfRevOfArt)
         for j in listOfRevOfArt:
             if j in GoodRev:
+                print i
+                print i[2]
+                print Articles[i[0]]
                 opinion = 10 - abs(i[2] - Articles[i[0]])
             else:
-                opinion=abs(i[2] - Articles[i[0]])
-            dupa=(i[0],i[1],j,opinion)
-            OpinionsAll.append(dupa)
+                if i[2] <> Articles[i[0]]:
+                    opinion=abs(i[2] - Articles[i[0]])
+                else:
+                    opinion=1
+
+            opinionFull=(i[0],i[1],j,opinion)
+            OpinionsAll.append(opinionFull)
     print "(article, reviewerArt, opinionArt, reviewerOp, opinionOp)"
     print OpinionsAll
 
     for item_oo in OpinionsAll:
-     print item_oo
-     cursr.executemany('''INSERT INTO opinions_op_beta (article_id, rev_id, reviewer_of_op, opinion_value)
-     VALUES (?,?,?,?)''', (item_oo, ))
+        #print item_oo
+        cursr.executemany('''INSERT INTO opinions_op_beta (article_id, rev_id, reviewer_of_op, opinion_value)
+        VALUES (?,?,?,?)''', (item_oo, ))
+
+    #for u in Articles:
+    #    print u
+    #kendalltau(x, y, initial_lexsort=True)[source]
+
+
+    cursr.close()
+    cursr2.close()
+
 
 if __name__ == "__main__":
     main()
@@ -410,3 +395,51 @@ if __name__ == "__main__":
     #                 if (NumOfArtForGoodRev[rand_rev] == z):
     #                     #del some_dict[key]
     #                      del NumOfArtForGoodRev[rand_rev]
+
+        #print distance
+    #rint len(distance)
+
+
+    #print OpinionsOfOp
+
+    #match opinions with opinions
+    # ArticleReviewerID = listTemp
+    #
+    # #self opinions
+    # OpinionsMatched=[]
+    # k=len(Reviewers)
+    # #list to store reviewers who gave opinion about o opinions already
+    # #NumOfOpAboutRevArt = {Reviewers[n]: [0]*k for n in range(len(Reviewers))}
+    #
+    # for article_id in Articles:
+    # #    for key, value in NumOfOpAboutRevArt.items():
+    # #        #if item is item_to_remove:
+    # #        if (NumOfOpAboutRevArt[key] == (y-1)):
+    # #             #del some_dict[key]
+    # #              del NumOfOpAboutRevArt[key]
+    #     count=0
+    #     listOfRevOfArt=[]
+    #     cursr2.execute('''select rev_id from opinions_art_beta where article_id=?''', (article_id,))
+    #
+    #     for i in cursr2.fetchall():
+    #          listOfRevOfArt.append(i[0])
+    #     random.shuffle(listOfRevOfArt)
+    #     #print listOfRevOfArt
+    #     for j in listOfRevOfArt:
+    #          temp1=list(listOfRevOfArt)
+    #          temp1.remove(j)
+    #
+    #          if len(temp1)>(y-1):
+    #              los1 = random.sample(temp1, int(y-1))
+    #          else:
+    #              los1=temp1
+    #          for randRev in los1:
+    #                   if randRev==j:
+    #                       #j=j-1
+    #                       break
+    #                   d=(article_id,j,randRev)
+    #                   OpinionsMatched.append(d)
+    #                   count+=1
+    #          if (count == y+2):
+    #             break
+                      #if randRev in NumOfOpAboutRevArt:
