@@ -278,18 +278,7 @@ if __name__ == "__main__":
     print OpinionAboutArticle
     #OpinionAboutArticle[i]=OiOpAll[i]
 
-    # while (Delta>0.00001):
-    #  	t2=np.dot(Ct,t)
-    #  	print'Vector t multiplied =' , t2
-    #  	print 'Vector sum t2 =',t2.sum(axis=0)
-    #  	VectorsRest=t2-t
-    #     print "vectors rest ", VectorsRest
-    #  	Delta=LA.norm(VectorsRest)
-    #  	print'Delta=',Delta
-    #  	t=t2
-    #
-    # print 'Last Delta',Delta
-    # print 'Vector t2 final', t2.sum(axis=0)
+
 
 
     #print NewDijsktra2(GraphG,1)
@@ -342,102 +331,5 @@ if __name__ == "__main__":
 
 
 
-#for i in range(Cij.shape[0]):
-#    for j in range(Cij.shape[1]):
-#            if Cij[i][j] >1:
-#                print Cij[i][j]
-#print Cij
 
-#filename = open("outputfile",'w')
-#sys.stdout = filename
-#print OiOpAll
-
-
-#print MatrixSim
-
-# cursr.execute('''
-# select article_id, rev_id, opinion_value from opinions_art
-# order by article_id
-# ''')
-# #article id, reviewer id, reviewer opinion, reviewer of reviewer, opinion about reviewer
-# Data_op = cursr.fetchall()
-#
-#
-#
-#
-# DirectOpinions=np.zeros(shape=(len(Reviewers),len(Reviewers)))
-
-#for i in Articles:
-#    calculate_opinions(Reviewers, Data)
-
-#DirectOpinions=np.zeros(shape=(len(Reviewers),len(Reviewers)))
-#temp=np.zeros(shape=(len(Reviewers),len(Reviewers)))
-
-# #direct opinions
-# for i in Reviewers:
-#     for j in data:
-#         if i==j[1]:
-#             #do not take into an account self-opinions - to be changed for proper algorithm
-#             if j[1]==j[3]:
-#                 pass #calculate values here !!!!
-#             else:
-#                 DirectOpinions[i-1][j[3]-1]+=j[4]
-#                 temp[i-1][j[3]-1]+=1
-#         else:
-#             pass
-#
-# with np.errstate(invalid='ignore'):
-#     CijDirect=np.where(temp>0, DirectOpinions/temp, 0)
-
-
-
-#for index,value in np.ndenumerate(CijDirect):
-#    if value == 0:
-#        print CijDirect[index]
-
-
-#
-# OpinionsMatrix=np.zeros(shape=(len(Articles),len(Reviewers)))
-#
-# for i in Articles:
-#     for j in Data_op:
-#         if i==j[0]:
-#                 OpinionsMatrix[i-1][j[1]-1]=j[2]
-#         else:
-#             pass
-
-#print OpinionsMatrix
-
-#print CijDirect
-#print OpinionsMatrix[0]
-
-#for i in range (0, len(CijDirect)):
-    #if CijDirect[0][i] == 0:
-        #print OpinionsMatrix[0][i]
-
-
-
-#dupa=[]
-#for i in Reviewers:
-#    for j in OpinionsMatrix[i-1]:
-        #print j
-#            dupa.append(j)
-#            print dupa
-            #print list(itertools.combinations(dupa,2))
-
-# for i in Reviewers:
-#     for cell in OpinionsMatrix[i-1].flat:
-#             for j in itertools.combinations(OpinionsMatrix[i-1], 2):
-#                 print i
-#             print cell
-
-#print OpinionsMatrix
-#print dist_out
-
-#for cell in dist_out.flat:
-#       if cell!= 0:
- #          pass
-            #print cell
-            #print cell[1][5]
-#print len(dist_out)
 
